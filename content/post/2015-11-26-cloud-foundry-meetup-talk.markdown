@@ -2,7 +2,7 @@
 categories: null
 comments: null
 date: "2015-11-26T06:09:34Z"
-description: null
+description: In this talk I covered routing, the CF CLI, User Provided Services (including programmatic access), and remote debugging with the Java Buildpack.
 image:
   credit: null
   creditlink: null

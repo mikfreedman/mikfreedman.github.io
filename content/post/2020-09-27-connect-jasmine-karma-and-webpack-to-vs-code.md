@@ -4,7 +4,7 @@ title: Connect Jasmine, Karma, and Webpack to VS Code
 ---
 
 If you'd like to learn how to run *and debug* [Jasmine](https://jasmine.github.io/2.0/introduction) tests executed using the [Karma](https://karma-runner.github.io/latest/index.html) test runner, right from [VS Code](https://code.visualstudio.com/), you've come to the right place.
-
+ <!--more-->
 Check out the repository referenced in this post at: [mikfreedman/jasmine-webpack-vscode](https://github.com/mikfreedman/jasmine-webpack-vscode)
 
 
