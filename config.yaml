@@ -9,8 +9,8 @@ params:
   description: "Director, VMware Tanzu"
   social:
     - icon: "github"
-      name: "My Github"
+      name: "Github"
       url: "https://github.com/mikfreedman"
     - icon: "linkedin"
-      name: "My LinkedIn"
+      name: "LinkedIn"
       url: "https://www.linkedin.com/in/michaelfreedman/"
