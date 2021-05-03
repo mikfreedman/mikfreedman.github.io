@@ -4,7 +4,7 @@ date: 2021-05-03T14:00:19-04:00
 ---
 
 By default [Github Pages](https://pages.github.com/) works automatically with [Jekyll](https://jekyllrb.com/) which is great! Sometimes though you want to try a different static site generator like say [Hugo](https://gohugo.io/); the good news is that with a little bit of jiggery pokery it's actually pretty easy to so!
-
+ <!--more-->
 For the most part, I followed [these instructions](https://gohugo.io/hosting-and-deployment/hosting-on-github/) to get setup. But there were some important things I needed to understand before it could work.
 
 First of all you can in fact host a personal site (e.g. repo: `[username].github.io`) that publishes a different branch than `main`, this means you don't need two repositories as some guides suggest. 
