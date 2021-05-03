@@ -3,3 +3,13 @@ disablePathToLower: true
 languageCode: en-us
 title: Michael Freedman
 theme: m10c
+params:
+  avatar: "/images/avatar.jpg"
+  description: "Director, VMware Tanzu"
+  social:
+    - icon: "github"
+      name: "My Github"
+      url: "https://github.com/mikfreedman"
+    - icon: "linkedin"
+      name: "My LinkedIn"
+      url: "https://www.linkedin.com/in/michaelfreedman/"
