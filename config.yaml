@@ -3,6 +3,7 @@ disablePathToLower: true
 languageCode: en-us
 title: Michael Freedman
 theme: m10c
+publishDir: "./docs"
 params:
   avatar: "/images/avatar.jpg"
   description: "Director, VMware Tanzu"
