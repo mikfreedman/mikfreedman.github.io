@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CloudFoundry Talk</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+      code {
+        border-radius: 5px;
+      }
+
+      .large {
+        margin-top: 125px;
+        font-size: 9em;
+      }
+      .jpark {
+        background-color: black;
+        font-color: white;
+      }
+
+      .white-right {
+        color: white;
+        text-align: right;
+      }
+      .medium-with-bump {
+        font-size: 2em;
+        margin-top: 50px;
+        margin-bottom: 50px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# ~~Best practices for deploying apps to~~ Cloud Foundry for developers
+![Default-aligned image](images/yak.png)
+
+@mikfreedman
+http://mjfreedman.com
+
+???
+This talk is less about Best Practices and more about using CF.
+
+Yak Shaving is the last step of a series of steps that occurs when you find something you need to do.
+
+Cloud Foundry can be considered a pre-shaved yak
+
+---
+class: middle
+
+# Agenda
+
+1. Introduction
+1. Challenges
+1. Routing
+1. The Cloud Foundry CLI
+  * Plugins
+  * CF Trace
+1. Services
+  * User Provided
+  * Programmatic Access
+1. Debugging Java
+  * The Buildpack
+  * Remote Debug
+
+---
+
+# Introduction
+
+* Pivotal Labs
+* Cloud Foundry
+* Me + Cloud Foundry
+* Onsi Fakhouri & The best tech talk that ever was
+
+.right[
+## <https://youtu.be/1OkmVTFhfLY>
+![Right-aligned image](images/onsi.png)
+]
+
+???
+* Pivotal Labs, acquisition & Cloud Foundry
+* Cloud Foundry development in the Labs way
+* I will talk about cloud foundry CLI (ruby -> go)
+* Onsi - VP of Engineering for CF. Amazing explanation of CF DEA -> Diego (it's out of date)
+---
+# Challenges
+
+.large[
+`cf push`
+]
+
+???
+* It can be this simple
+* Often it's not though.
+  * Often apps are more complex
+  * Often apps are more complex
+<!-- * The story we are often told as developers is just `cf push` & that's all there is. -->
+<!-- * In reality, things get a little bit more complex (especially for apps that use esoteric buildpacks) -->
+* Having said that, Pivotal has made a serious effort to streamline the Java experience.
+* Cloud Foundry is geared towards standard 12 factor apps (as it should be)
+  * Use user provided services to extract sensitive configuration
+
+---
+background-image: url(images/iceberg.jpg)
+---
+# Routing
+
+* Application Level Routing
+* Orphaned Routes (`cf delete-orphaned-routes`)
+* Leveraging This Knowledge
+
+.right[![Right-aligned image](images/interlocking.jpg)]
+???
+* We are looking at the Bowling Green interlocking, this controls which trains can go onto which tracks for a section of NYC subway.
+* Sometimes considered the first computers
+* I like to think of Application Level routing as Logical Routing
+* Orphaned: once a route is deleted - it's back in the pool
+  * CF does not delete routes by default for this reason
+
+** BECAUSE IT'S SOFTWARE, IT'S HIGHLY CONFIGURABLE**
+
+---
+# Working with Routes
+
+.small[
+`cf routes`
+```bash
+Getting routes as mfreedman@pivotal.io ...
+
+space         host              domain      apps
+development   mik-sinatra       cfapps.io   mik-maintenance
+development   mik-maintenance   cfapps.io   mik-maintenance
+```
+
+`cf map-route`
+```bash
+$ cf map-route mik-maintenance cfapps.io -n mik-sinatra
+Creating route mik-sinatra.cfapps.io for org mik / space development
+OK
+Route mik-sinatra.cfapps.io already exists
+Adding route mik-sinatra.cfapps.io to app mik-maintenance in org..
+OK
+```
+
+`cf unmap-route`
+```bash
+$ cf unmap-route mik-sinatra cfapps.io -n mik-sinatra
+Removing route mik-sinatra.cfapps.io from app mik-sinatra in org..
+OK
+```
+]
+
+???
+* DEMO - Maintenance vs prod
+* You might be thinking to yourself - (I wonder if I should pick up the laundry)
+  * This would be an awesome way to do blue-green deployments.
+  * And you'd be right!
+  * What people often do - vs what you probably should do
+
+---
+background-image: url(images/winter.png)
+---
+class: jpark
+background-image: url(images/jpark.jpg)
+.white-right[
+  # The CloudFoundry CLI
+]
+???
+* Re-written in go from ruby
+* Really just an HTTP client for the CF API
+* The developer's main interaction with Cloud Foundry
+
+---
+# Getting over the wall
+
+## HTTP Proxy
+
+Install a proxy on your bastion host, then
+```bash
+HTTP_PROXY=http://bastion cf target -a http://system.cf
+```
+
+.center[
+![Center-aligned image](images/profit.jpg)
+]
+
+---
+# Getting over the wall
+
+## Using SSH Tunnels
+
+```bash
+ssh -L 80:system.cf:80 bastion # from local machine
+cf target -a http://localhost
+```
+
+## Using SSH Reverse Tunnels
+
+```bash
+ssh -R 80:localhost:80 bastion # from system.cf
+ssh -L 80:localhost:80 bastion # from local machine
+
+cf target -a http://localhost
+```
+
+???
+* Tinyproxy
+* BASTION IS A JUMPHOST
+
+---
+# Plugins
+
+>The Cloud Foundry Command Line Interface (cf CLI) v.6.7 and higher includes plugin functionality. These plugins enable developers to add custom commands to the cf CLI. You can install and use plugins that Cloud Foundry developers and third-party developers create
+
+.medium-with-bump[
+<http://plugins.cloudfoundry.org/ui/>
+]
+
+---
+class: center, middle
+# concourse/autopilot
+
+![Center-aligned image](images/airplane.jpeg)
+
+???
+* TECHNOLOGY AGNOSTIC
+* Treating a manifest as the source of truth and will converge the state of the system towards that.
+* LEVEREGING MANIFEST
+
+1. The old application is renamed to <APP-NAME>-venerable. It keeps its old route mappings and this change is invisible to users.
+1. The new application is pushed to <APP-NAME> (assuming that the name has not been changed in the manifest). It binds to the same routes as the old application (due to them being defined in the manifest) and traffic begins to be load-balanced between the two applications.
+1. The old application is deleted along with its route mappings. All traffic now goes to the new application.
+
+---
+class: jpark, middle
+background-image: url(images/cf_trace.png)
+
+.white-right[
+# CF_TRACE
+]
+
+```bash
+CF_TRACE=true cf push
+
+## CF Push output
+Uploading app files from: /Users/mik/workspace/cf-dev-talk
+Uploading 2.3M, 11 files
+
+## Subsequent Request
+REQUEST: [2015-11-25T21:03:23+11:00]
+PUT /v2/apps/98edbfa4-75d4-49ca-a772-a59e6bcddf2f/bits
+Host: api.run.pivotal.io
+Accept: application/json
+Authorization: [PRIVATE DATA HIDDEN]
+Content-Type: multipart/form-data;
+User-Agent: go-cli 6.13.0-e68ce0f / darwin
+```
+
+---
+class: middle, center
+
+# Services
+
+![Center-aligned image](images/dining.jpg)
+
+???
+* Service Brokers provide instances / resources for clients
+* Databases, SaaS
+
+---
+# User Provided Services
+
+## External Resources
+## 12 Factor Apps [Config]
+
+> The twelve-factor app stores config in environment variables (often shortened to env vars or env). Env vars are easy to change between deploys without changing any code; unlike config files, there is little chance of them being checked into the code repo accidentally; and unlike custom config files, or other config mechanisms such as Java System Properties, they are a language- and OS-agnostic standard.
+
+---
+class: middle, center
+
+# As a developer
+# I need to access a provisioned service's credentials programmatically
+#So that I can drop the production db with a script
+
+???
+
+---
+class: middle, center
+![Center-aligned image](images/interesting.jpg)
+
+---
+# Programmatic Access
+.medium-with-bump[
+cf curl + jq to the rescue
+]
+
+```bash
+$ GUID=`cf app mik-sinatra --guid`
+$ cf curl /v2/apps/${GUID}/env \
+| jq '..|.uri? | select(. != null)'
+
+
+"postgres://username:password@pellefant-01.db.elephantsql.com:5432/iChangedThis"
+```
+
+???
+* CF curl allows to you to construct queries using the information gleaned from CF_TRACE
+* You can see the obvious application for scripts
+* Most programming laguages have a library for this API.
+
+---
+# Debugging Java
+
+## The Buildpack
+
+```bash
+cf set-env mik-sinatra JBP_LOG_LEVEL DEBUG
+```
+
+## Remote Debug
+
+.medium-with-bump[
+cloudfoundry/java-buildpack/docs/framework-debug
+]
+
+???
+* What is a buildpack?
+* A WAR Story, get it?
+
+---
+###Demonstration
+
+.center[
+![Center-aligned image](images/popcorn.gif)
+]
+
+* fork the buildpack
+* twiddle the config
+* push the app in `debug` mode
+* attach the IDE
+* debug!
+
+```bash
+cf ssh -T -L 8000:localhost:8000 mik-petclinic
+```
+???
+
+```yaml
+---
+applications:
+  - name: 'mik-petclinic'
+    path: 'petclinic.war'
+    buildpack: 'https://github.com/mikfreedman/java-buildpack.git'
+```
+
+---
+# Recap
+
+1. Routing
+1. The Cloud Foundry CLI
+  * Plugins
+  * CF Trace
+1. Services
+  * User Provided
+  * Programmatic Access
+1. Debugging Java
+  * The Buildpack
+  * Remote Debug
+
+---
+class: jpark
+background-image: url(images/office.jpg)
+
+---
+.center[
+![Center-aligned image](images/www.png)
+]
+
+## Links to the World Wide Web
+
+Page                   | URL
+---                    | ---
+Pr Shaved Yak          | http://preshavedyak.com/ 
+Onsi's Talk on Diego   | https://youtu.be/1OkmVTFhfLY
+Autopilot (Blue Green) | https://github.com/concourse/autopilot
+The Twelve Factor App  | http://12factor.net/
+jq (JSON)              | https://stedolan.github.io/jq/
+cf CLI                 | https://docs.cloudfoundry.org/devguide/installcf/
+
+    </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: 'tomorrow-night-eighties'
+      });
+    </script>
+  </body>
+</html>
