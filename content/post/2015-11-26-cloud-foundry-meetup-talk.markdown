@@ -11,6 +11,7 @@ modified: null
 share: null
 tags: []
 title: Cloud Foundry Meetup Talk
+summary: A collection of links and topics from my Cloud Foundry talk
 ---
 
 ![Talk](https://pbs.twimg.com/media/CUuavAAVEAALYGG.jpg)
