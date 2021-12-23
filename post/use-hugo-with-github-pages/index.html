@@ -1,1 +1,74 @@
-<!doctype html><html lang=en-us><head><title>Use Hugo With Github Pages // Michael Freedman</title><link rel="shortcut icon" href=/favicon.ico><meta charset=utf-8><meta name=generator content="Hugo 0.83.1"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="John Doe"><meta name=description content><link rel=stylesheet href=https://mjfreedman.com/css/main.min.88e7083eff65effb7485b6e6f38d10afbec25093a6fac42d734ce9024d3defbd.css><meta name=twitter:card content="summary"><meta name=twitter:title content="Use Hugo With Github Pages"><meta name=twitter:description content="By default Github Pages works automatically with Jekyll which is great! Sometimes though you want to try a different static site generator like say Hugo; the good news is that with a little bit of jiggery pokery it&rsquo;s actually pretty easy to so!"><meta property="og:title" content="Use Hugo With Github Pages"><meta property="og:description" content="By default Github Pages works automatically with Jekyll which is great! Sometimes though you want to try a different static site generator like say Hugo; the good news is that with a little bit of jiggery pokery it&rsquo;s actually pretty easy to so!"><meta property="og:type" content="article"><meta property="og:url" content="https://mjfreedman.com/post/use-hugo-with-github-pages/"><meta property="article:section" content="post"><meta property="article:published_time" content="2021-05-03T14:00:19-04:00"><meta property="article:modified_time" content="2021-05-03T14:00:19-04:00"></head><body><header class=app-header><a href=https://mjfreedman.com><img class=app-header-avatar src=/images/avatar.jpg alt="John Doe"></a><h1>Michael Freedman</h1><p>Director, VMware Tanzu</p><div class=app-header-social><a href=https://github.com/mikfreedman target=_blank rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github"><title>Github</title><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg></a><a href=https://www.linkedin.com/in/michaelfreedman/ target=_blank rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-linkedin"><title>LinkedIn</title><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a></div></header><main class=app-container><article class=post><header class=post-header><h1 class=post-title>Use Hugo With Github Pages</h1><div class=post-meta><div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>May 3, 2021</div><div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock"><title>clock</title><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2 min read</div></div></header><div class=post-content><p>By default <a href=https://pages.github.com/>Github Pages</a> works automatically with <a href=https://jekyllrb.com/>Jekyll</a> which is great! Sometimes though you want to try a different static site generator like say <a href=https://gohugo.io/>Hugo</a>; the good news is that with a little bit of jiggery pokery it&rsquo;s actually pretty easy to so!</p><p>For the most part, I followed <a href=https://gohugo.io/hosting-and-deployment/hosting-on-github/>these instructions</a> to get setup. But there were some important things I needed to understand before it could work.</p><p>First of all you can in fact host a personal site (e.g. repo: <code>[username].github.io</code>) that publishes a different branch than <code>main</code>, this means you don&rsquo;t need two repositories as some guides suggest.</p><p>You can basically use the Github Action from the instructions above almost verbatim. <a href=https://github.com/marketplace/actions/hugo-setup>That action</a> will create a branch called <code>gh-pages</code> and commit the generated site to its root directory. This means that Github Pages will not try and run Jekyll because it will detect a static site at the <code>gh-pages</code> branch and just publish that.</p><p>For whatever reason, understanding how that all works took me a while and wasn&rsquo;t immediately obvious (to me) from the documentation.</p><p>Here is the workflow:</p><p><strong>Initial Setup</strong></p><ul><li>Create a repository on Github called <code>[yourusername].github.io</code></li><li>Push your newly created Hugo site to it as is</li><li>Add the Github Action shown in <a href=https://gohugo.io/hosting-and-deployment/hosting-on-github/>the instructions</a> to your repo</li><li>Push that action (and make sure it runs)</li><li>Go to your repo settings and select <code>gh-pages</code> branch for publishing, ignoring any Jekyll errors you see on the way</li><li>Make a change to your site and push it once more</li><li>Confirm that the site is published!</li></ul><p><strong>Ongoing</strong></p><ul><li>Push changes as normal</li><li>Confirm that the Github Action executed successfully</li></ul></div><div class=post-footer></div></article></main></body></html>
+<!doctype html><html lang=en-us>
+<head>
+<title>Use Hugo With Github Pages // Michael Freedman</title>
+<link rel="shortcut icon" href=/favicon.ico>
+<meta charset=utf-8>
+<meta name=generator content="Hugo 0.91.1">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=author content="John Doe">
+<meta name=description content>
+<link rel=stylesheet href=https://mjfreedman.com/css/main.min.88e7083eff65effb7485b6e6f38d10afbec25093a6fac42d734ce9024d3defbd.css>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Use Hugo With Github Pages">
+<meta name=twitter:description content="By default Github Pages works automatically with Jekyll which is great! Sometimes though you want to try a different static site generator like say Hugo; the good news is that with a little bit of jiggery pokery it&rsquo;s actually pretty easy to so!">
+<meta property="og:title" content="Use Hugo With Github Pages">
+<meta property="og:description" content="By default Github Pages works automatically with Jekyll which is great! Sometimes though you want to try a different static site generator like say Hugo; the good news is that with a little bit of jiggery pokery it&rsquo;s actually pretty easy to so!">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mjfreedman.com/post/use-hugo-with-github-pages/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-05-03T14:00:19-04:00">
+<meta property="article:modified_time" content="2021-05-03T14:00:19-04:00">
+</head>
+<body>
+<header class=app-header>
+<a href=https://mjfreedman.com><img class=app-header-avatar src=/images/avatar.jpg alt="John Doe"></a>
+<h1>Michael Freedman</h1>
+<p>Director, VMware Tanzu</p>
+<div class=app-header-social>
+<a href=https://github.com/mikfreedman target=_blank rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github"><title>Github</title><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg>
+</a>
+<a href=https://www.linkedin.com/in/michaelfreedman/ target=_blank rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-linkedin"><title>LinkedIn</title><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+</a>
+</div>
+</header>
+<main class=app-container>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Use Hugo With Github Pages</h1>
+<div class=post-meta>
+<div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+May 3, 2021
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock"><title>clock</title><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+2 min read
+</div>
+</div>
+</header>
+<div class=post-content>
+<p>By default <a href=https://pages.github.com/>Github Pages</a> works automatically with <a href=https://jekyllrb.com/>Jekyll</a> which is great! Sometimes though you want to try a different static site generator like say <a href=https://gohugo.io/>Hugo</a>; the good news is that with a little bit of jiggery pokery it&rsquo;s actually pretty easy to so!</p>
+<p>For the most part, I followed <a href=https://gohugo.io/hosting-and-deployment/hosting-on-github/>these instructions</a> to get setup. But there were some important things I needed to understand before it could work.</p>
+<p>First of all you can in fact host a personal site (e.g. repo: <code>[username].github.io</code>) that publishes a different branch than <code>main</code>, this means you don&rsquo;t need two repositories as some guides suggest.</p>
+<p>You can basically use the Github Action from the instructions above almost verbatim. <a href=https://github.com/marketplace/actions/hugo-setup>That action</a> will create a branch called <code>gh-pages</code> and commit the generated site to its root directory. This means that Github Pages will not try and run Jekyll because it will detect a static site at the <code>gh-pages</code> branch and just publish that.</p>
+<p>For whatever reason, understanding how that all works took me a while and wasn&rsquo;t immediately obvious (to me) from the documentation.</p>
+<p>Here is the workflow:</p>
+<p><strong>Initial Setup</strong></p>
+<ul>
+<li>Create a repository on Github called <code>[yourusername].github.io</code></li>
+<li>Push your newly created Hugo site to it as is</li>
+<li>Add the Github Action shown in <a href=https://gohugo.io/hosting-and-deployment/hosting-on-github/>the instructions</a> to your repo</li>
+<li>Push that action (and make sure it runs)</li>
+<li>Go to your repo settings and select <code>gh-pages</code> branch for publishing, ignoring any Jekyll errors you see on the way</li>
+<li>Make a change to your site and push it once more</li>
+<li>Confirm that the site is published!</li>
+</ul>
+<p><strong>Ongoing</strong></p>
+<ul>
+<li>Push changes as normal</li>
+<li>Confirm that the Github Action executed successfully</li>
+</ul>
+</div>
+<div class=post-footer>
+</div>
+</article>
+</main>
+</body>
+</html>

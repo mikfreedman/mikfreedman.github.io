@@ -1,6 +1,65 @@
-<!doctype html><html lang=en-us><head><title>Connect Jasmine, Karma, and Webpack to VS Code // Michael Freedman</title><link rel="shortcut icon" href=/favicon.ico><meta charset=utf-8><meta name=generator content="Hugo 0.83.1"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="John Doe"><meta name=description content><link rel=stylesheet href=https://mjfreedman.com/css/main.min.88e7083eff65effb7485b6e6f38d10afbec25093a6fac42d734ce9024d3defbd.css><meta name=twitter:card content="summary"><meta name=twitter:title content="Connect Jasmine, Karma, and Webpack to VS Code"><meta name=twitter:description content="If you&rsquo;d like to learn how to run and debug Jasmine tests executed using the Karma test runner, right from VS Code, you&rsquo;ve come to the right place."><meta property="og:title" content="Connect Jasmine, Karma, and Webpack to VS Code"><meta property="og:description" content="If you&rsquo;d like to learn how to run and debug Jasmine tests executed using the Karma test runner, right from VS Code, you&rsquo;ve come to the right place."><meta property="og:type" content="article"><meta property="og:url" content="https://mjfreedman.com/post/2020-09-27-connect-jasmine-karma-and-webpack-to-vs-code/"><meta property="article:section" content="post"><meta property="article:published_time" content="2020-09-27T00:00:00+00:00"><meta property="article:modified_time" content="2020-09-27T00:00:00+00:00"></head><body><header class=app-header><a href=https://mjfreedman.com><img class=app-header-avatar src=/images/avatar.jpg alt="John Doe"></a><h1>Michael Freedman</h1><p>Director, VMware Tanzu</p><div class=app-header-social><a href=https://github.com/mikfreedman target=_blank rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github"><title>Github</title><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg></a><a href=https://www.linkedin.com/in/michaelfreedman/ target=_blank rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-linkedin"><title>LinkedIn</title><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a></div></header><main class=app-container><article class=post><header class=post-header><h1 class=post-title>Connect Jasmine, Karma, and Webpack to VS Code</h1><div class=post-meta><div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Sep 27, 2020</div><div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock"><title>clock</title><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2 min read</div></div></header><div class=post-content><p>If you&rsquo;d like to learn how to run <em>and debug</em> <a href=https://jasmine.github.io/2.0/introduction>Jasmine</a> tests executed using the <a href=https://karma-runner.github.io/latest/index.html>Karma</a> test runner, right from <a href=https://code.visualstudio.com/>VS Code</a>, you&rsquo;ve come to the right place.</p><p>Check out the repository referenced in this post at: <a href=https://github.com/mikfreedman/jasmine-webpack-vscode>mikfreedman/jasmine-webpack-vscode</a></p><h2 id=installation>Installation</h2><h3 id=install-vscode>Install VSCode</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>brew cask install visual-studio-code
-</code></pre></div><h3 id=install-angularkarma-test-explorer-for-visual-studio-codehttpsmarketplacevisualstudiocomitemsitemnameraaghangular-karma-test-explorer>Install <a href="https://marketplace.visualstudio.com/items?itemName=raagh.angular-karma-test-explorer">Angular/Karma Test Explorer for Visual Studio Code</a></h3><h3 id=install-node-packages>Install Node Packages</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>npm install
-</code></pre></div><h2 id=test-for-great-success>Test For Great Success</h2><p>Use the &ldquo;Test Explorer&rdquo; in VS Code to run / debug tests</p><p>Break right into your code, with variable names and everything!</p><h2 id=how-it-works>How it works</h2><p>Using the <em>Angular/Karma Test Explorer</em> extension, you can attach to the Chrome instance that&rsquo;s running your Karma tests. The following configuration makes this work: <a href=https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/karma.conf.js>karma.conf.js</a>, <a href=https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/.vscode/settings.json>.vscode/settings.json</a>. The repo contains step by step diffs in its git log, I&rsquo;ve detailed some key points below.</p><h3 id=attaching-the-debugger>Attaching the debugger</h3><p>The <em>Angular/Karma Test Explorer</em> expects you to setup karma to execute chrome to listen for debugger connections on port <strong>9222</strong>. Here&rsquo;s what the extension&rsquo;s default <strong>launch.json</strong> looks like:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>    <span style=color:#e6db74>&#34;angularKarmaTestExplorer.debuggerConfiguration&#34;</span><span style=color:#960050;background-color:#1e0010>:</span> {
+<!doctype html><html lang=en-us>
+<head>
+<title>Connect Jasmine, Karma, and Webpack to VS Code // Michael Freedman</title>
+<link rel="shortcut icon" href=/favicon.ico>
+<meta charset=utf-8>
+<meta name=generator content="Hugo 0.91.1">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=author content="John Doe">
+<meta name=description content>
+<link rel=stylesheet href=https://mjfreedman.com/css/main.min.88e7083eff65effb7485b6e6f38d10afbec25093a6fac42d734ce9024d3defbd.css>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Connect Jasmine, Karma, and Webpack to VS Code">
+<meta name=twitter:description content="If you&rsquo;d like to learn how to run and debug Jasmine tests executed using the Karma test runner, right from VS Code, you&rsquo;ve come to the right place.">
+<meta property="og:title" content="Connect Jasmine, Karma, and Webpack to VS Code">
+<meta property="og:description" content="If you&rsquo;d like to learn how to run and debug Jasmine tests executed using the Karma test runner, right from VS Code, you&rsquo;ve come to the right place.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mjfreedman.com/post/2020-09-27-connect-jasmine-karma-and-webpack-to-vs-code/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2020-09-27T00:00:00+00:00">
+<meta property="article:modified_time" content="2020-09-27T00:00:00+00:00">
+</head>
+<body>
+<header class=app-header>
+<a href=https://mjfreedman.com><img class=app-header-avatar src=/images/avatar.jpg alt="John Doe"></a>
+<h1>Michael Freedman</h1>
+<p>Director, VMware Tanzu</p>
+<div class=app-header-social>
+<a href=https://github.com/mikfreedman target=_blank rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github"><title>Github</title><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg>
+</a>
+<a href=https://www.linkedin.com/in/michaelfreedman/ target=_blank rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-linkedin"><title>LinkedIn</title><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+</a>
+</div>
+</header>
+<main class=app-container>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Connect Jasmine, Karma, and Webpack to VS Code</h1>
+<div class=post-meta>
+<div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+Sep 27, 2020
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock"><title>clock</title><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+2 min read
+</div>
+</div>
+</header>
+<div class=post-content>
+<p>If you&rsquo;d like to learn how to run <em>and debug</em> <a href=https://jasmine.github.io/2.0/introduction>Jasmine</a> tests executed using the <a href=https://karma-runner.github.io/latest/index.html>Karma</a> test runner, right from <a href=https://code.visualstudio.com/>VS Code</a>, you&rsquo;ve come to the right place.</p>
+<p>Check out the repository referenced in this post at: <a href=https://github.com/mikfreedman/jasmine-webpack-vscode>mikfreedman/jasmine-webpack-vscode</a></p>
+<h2 id=installation>Installation</h2>
+<h3 id=install-vscode>Install VSCode</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>brew cask install visual-studio-code
+</code></pre></div><h3 id=install-angularkarma-test-explorer-for-visual-studio-codehttpsmarketplacevisualstudiocomitemsitemnameraaghangular-karma-test-explorer>Install <a href="https://marketplace.visualstudio.com/items?itemName=raagh.angular-karma-test-explorer">Angular/Karma Test Explorer for Visual Studio Code</a></h3>
+<h3 id=install-node-packages>Install Node Packages</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>npm install
+</code></pre></div><h2 id=test-for-great-success>Test For Great Success</h2>
+<p>Use the &ldquo;Test Explorer&rdquo; in VS Code to run / debug tests</p>
+<p>Break right into your code, with variable names and everything!</p>
+<h2 id=how-it-works>How it works</h2>
+<p>Using the <em>Angular/Karma Test Explorer</em> extension, you can attach to the Chrome instance that&rsquo;s running your Karma tests. The following configuration makes this work: <a href=https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/karma.conf.js>karma.conf.js</a>, <a href=https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/.vscode/settings.json>.vscode/settings.json</a>. The repo contains step by step diffs in its git log, I&rsquo;ve detailed some key points below.</p>
+<h3 id=attaching-the-debugger>Attaching the debugger</h3>
+<p>The <em>Angular/Karma Test Explorer</em> expects you to setup karma to execute chrome to listen for debugger connections on port <strong>9222</strong>. Here&rsquo;s what the extension&rsquo;s default <strong>launch.json</strong> looks like:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>    <span style=color:#e6db74>&#34;angularKarmaTestExplorer.debuggerConfiguration&#34;</span><span style=color:#960050;background-color:#1e0010>:</span> {
         <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;Debug tests&#34;</span>,
         <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;chrome&#34;</span>,
         <span style=color:#f92672>&#34;request&#34;</span>: <span style=color:#e6db74>&#34;attach&#34;</span>,
@@ -15,7 +74,8 @@
             <span style=color:#f92672>&#34;/./~/*&#34;</span>: <span style=color:#e6db74>&#34;${webRoot}/node_modules/*&#34;</span>
         }
     }
-</code></pre></div><p>So we need to setup our <a href=https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/karma.conf.js>karma.config.js</a> to allow for this connection:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff><span style=color:#f92672>-      browsers: [&#39;ChromeHeadless&#39;/*,&#39;PhantomJS&#39;,&#39;Firefox&#39;,&#39;Edge&#39;,&#39;ChromeCanary&#39;,&#39;Opera&#39;,&#39;IE&#39;,&#39;Safari&#39;*/],
+</code></pre></div><p>So we need to setup our <a href=https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/karma.conf.js>karma.config.js</a> to allow for this connection:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff><span style=color:#f92672>-      browsers: [&#39;ChromeHeadless&#39;/*,&#39;PhantomJS&#39;,&#39;Firefox&#39;,&#39;Edge&#39;,&#39;ChromeCanary&#39;,&#39;Opera&#39;,&#39;IE&#39;,&#39;Safari&#39;*/],
 </span><span style=color:#f92672></span><span style=color:#a6e22e>+      browsers: [&#39;ChromeHeadlessDebugging&#39;/*,&#39;PhantomJS&#39;,&#39;Firefox&#39;,&#39;Edge&#39;,&#39;ChromeCanary&#39;,&#39;Opera&#39;,&#39;IE&#39;,&#39;Safari&#39;*/],
 </span><span style=color:#a6e22e>+      customLaunchers: {
 </span><span style=color:#a6e22e>+        ChromeHeadlessDebugging: {
@@ -25,12 +85,24 @@
 </span><span style=color:#a6e22e>+          ]
 </span><span style=color:#a6e22e>+        }
 </span><span style=color:#a6e22e>+      },
-</span></code></pre></div><p>Confirm this works by looking at the extension logs and seeing something like this:</p><pre><code>[3:24:25 PM] INFO: Listening to AngularReporter events on port 9222
+</span></code></pre></div><p>Confirm this works by looking at the extension logs and seeing something like this:</p>
+<pre tabindex=0><code>[3:24:25 PM] INFO: Listening to AngularReporter events on port 9222
 [3:24:33 PM] INFO: Test loading completed
-</code></pre><h3 id=mapping-source>Mapping Source</h3><p>Get webpack to emit inline source maps in <a href=karma.conf.js>karma.conf.js</a>. Also ask it nicely to not minimize the generated code so that variable names match.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff>       webpack: {
+</code></pre><h3 id=mapping-source>Mapping Source</h3>
+<p>Get webpack to emit inline source maps in <a href=karma.conf.js>karma.conf.js</a>. Also ask it nicely to not minimize the generated code so that variable names match.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff>       webpack: {
 <span style=color:#a6e22e>+        devtool: &#34;inline-source-map&#34;,
 </span><span style=color:#a6e22e>+        optimization: {
 </span><span style=color:#a6e22e>+          minimize: false
 </span><span style=color:#a6e22e>+        },
-</span></code></pre></div><h2 id=kill-stray-stuff>Kill stray stuff</h2><p>Keep an eye out for errant Chrome instances that gum up the works and generally foster weird behavior.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ps -ef | grep <span style=color:#ae81ff>9222</span> | cut -f <span style=color:#ae81ff>5</span> -d <span style=color:#e6db74>&#39; &#39;</span> | xargs kill
-</code></pre></div><p><a href="https://explainshell.com/explain?cmd=ps+-ef+%7C+grep+9222+%7C+cut+-f+5+-d+%27+%27++%7C+xargs+kill">Check out what this does</a></p></div><div class=post-footer></div></article></main></body></html>
+</span></code></pre></div><h2 id=kill-stray-stuff>Kill stray stuff</h2>
+<p>Keep an eye out for errant Chrome instances that gum up the works and generally foster weird behavior.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ps -ef | grep <span style=color:#ae81ff>9222</span> | cut -f <span style=color:#ae81ff>5</span> -d <span style=color:#e6db74>&#39; &#39;</span> | xargs kill
+</code></pre></div><p><a href="https://explainshell.com/explain?cmd=ps+-ef+%7C+grep+9222+%7C+cut+-f+5+-d+%27+%27++%7C+xargs+kill">Check out what this does</a></p>
+</div>
+<div class=post-footer>
+</div>
+</article>
+</main>
+</body>
+</html>
