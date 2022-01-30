@@ -5,14 +5,8 @@ title: Michael Freedman
 theme: m10c
 publishDir: "./docs"
 params:
-  style:
-    darkestColor: "#B8B8B8"
-    darkColor: "#F9F9F9"
-    lightColor: "#262626"
-    lightestColor: "#4464AD"
-    primaryColor: "#4464AD"
   avatar: "/images/avatar.jpg"
-  description: "Director, Strategy at VMware Tanzu Labs"
+  description: "Director, VMware Tanzu"
   social:
     - icon: "github"
       name: "Github"
