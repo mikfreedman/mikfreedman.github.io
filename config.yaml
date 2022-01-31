@@ -1,16 +1,65 @@
 baseURL: https://mjfreedman.com
 disablePathToLower: true
 languageCode: en-us
+defaultContentLanguage: "en"
 title: Michael Freedman
-theme: m10c
+theme: loveit
 publishDir: "./docs"
 params:
-  avatar: "/images/avatar.jpg"
-  description: "Director, VMware Tanzu"
+  version: 0.2.X
+  description:  "Director, VMware Tanzu"
+  defaultTheme: auto
+  gitRepo: 'https://github.com/mikfreedman/mikfreedman.github.io/'
+  dateFormat: '2006-01-02'
+  images:
+    - /images/avatar.jpg
+  app:
+    title: Michael Freedman
+    noFavicon: true
+    themeColor: '#ffffff'
+    iconColor: '#5bbad5'
+    tileColor: '#da532c'
+  footer:
+    enable: true
+    custom: ''
+    hugo: false
+    copyright: true
+    author: true
+    since: 2022
+  home:
+    rss: 10
+    profile:
+      enable: true
+      gravatarEmail: 'github@michael-freedman.com'
+      avatarURL: /images/avatar.png
+      title: ''
+      subtitle: "Director, VMware Tanzu"
+      social: true
+      disclaimer: ''
+    posts:
+      enable: true
+      paginate: 6
   social:
-    - icon: "github"
-      name: "Github"
-      url: "https://github.com/mikfreedman"
-    - icon: "linkedin"
-      name: "LinkedIn"
-      url: "https://www.linkedin.com/in/michaelfreedman/"
+    GitHub: "mikfreedman"
+    Linkedin: "michaelfreedman/"
+  page:
+    hiddenFromHomePage: false
+    toc:
+      enable: true
+      keepStatic: true
+      auto: true
+    code:
+      copy: true
+      maxShownLines: 20
+    share:
+      enable: true
+      Twitter: true
+      Linkedin: false
+    comment:
+      enable: false
+author:
+  name: Michael Freedman
+Permalinks:
+  posts: ':filename'
+privacy:
+  googleAnalytics: {}

@@ -1,6 +1,7 @@
 ---
 date: "2020-09-27T00:00:00Z"
 title: Connect Jasmine, Karma, and Webpack to VS Code
+aliases: [/post/2020-09-27-connect-jasmine-karma-and-webpack-to-vs-code]
 ---
 
 If you'd like to learn how to run *and debug* [Jasmine](https://jasmine.github.io/2.0/introduction) tests executed using the [Karma](https://karma-runner.github.io/latest/index.html) test runner, right from [VS Code](https://code.visualstudio.com/), you've come to the right place.

@@ -11,6 +11,7 @@ tags:
 - fly
 - concourse
 title: Concourse Fly REPL
+aliases: [/post/2017-08-03-concourse-fly-repl]
 ---
 	
 have you ever needed to login into a team on [concourse](https://concourse.ci/) and then forgotten you were targeting that team and then done something stupid? I have the solution for you!

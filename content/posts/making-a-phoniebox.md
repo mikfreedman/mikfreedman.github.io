@@ -1,6 +1,7 @@
 ---
 title: "Making a Phoniebox"
 date: 2021-12-23T11:35:06-05:00
+aliases: [/post/making-a-phoniebox]
 ---
 
 A [Phoniebox](http://phoniebox.de/index-en.html) is a music Jukebox that plays songs when RFID cards are swiped near it.

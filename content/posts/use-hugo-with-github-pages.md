@@ -1,6 +1,7 @@
 ---
 title: "Use Hugo With Github Pages"
 date: 2021-05-03T14:00:19-04:00
+aliases: [/post/use-hugo-with-github-pages]
 ---
 
 By default [Github Pages](https://pages.github.com/) works automatically with [Jekyll](https://jekyllrb.com/) which is great! Sometimes though you want to try a different static site generator like say [Hugo](https://gohugo.io/); the good news is that with a little bit of jiggery pokery it's actually pretty easy to so!

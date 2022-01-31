@@ -12,6 +12,7 @@ share: null
 tags: []
 title: Cloud Foundry Meetup Talk
 summary: A collection of links and topics from my Cloud Foundry talk
+aliases: [/post/2015-11-26-cloud-foundry-meetup-talk]
 ---
 
 ![Talk](https://pbs.twimg.com/media/CUuavAAVEAALYGG.jpg)

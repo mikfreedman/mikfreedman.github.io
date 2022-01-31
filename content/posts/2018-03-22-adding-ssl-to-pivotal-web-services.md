@@ -11,6 +11,7 @@ tags:
 - pws
 - cloudfoundry
 title: Adding SSL to Pivotal Web Services (PWS)
+aliases: [/post/2018-03-22-adding-ssl-to-pivotal-web-services]
 ---
 If you have registered a custom domain that you would like to use with [Pivotal Web Services](https://run.pivotal.io/) (PWS) or any other Cloud Foundry instance, you may **also** want to use SSL, here's how.
  <!--more-->

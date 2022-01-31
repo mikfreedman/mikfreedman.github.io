@@ -11,6 +11,7 @@ modified: null
 share: null
 tags: []
 title: Running Ghost on Cloud Foundry
+aliases: [/post/2017-06-24-ghost-on-cf]
 ---
 
 At work, we often create blogs for our projects so that we can easily share out progress, and more importantly show people pretty pictures of our progress.
