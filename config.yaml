@@ -45,9 +45,7 @@ params:
   page:
     hiddenFromHomePage: false
     toc:
-      enable: true
-      keepStatic: true
-      auto: true
+      enable: false
     code:
       copy: true
       maxShownLines: 20
