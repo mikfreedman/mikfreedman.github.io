@@ -24,7 +24,7 @@ These instructions were cribbed from the following places:
 
 ## Create a domain on PWS
 
-```bash
+```
 cf create-domain space-name example.com
 ```
 * You must be an org manager to create domain like this.
@@ -39,7 +39,7 @@ app.example.com. CNAME app.cfapps.io # example DNS configuration
 
 ## Create and map your route
 
-```bash
+```
  cf create-route app example.com
  cf map-route application example.com --hostname app
  ```

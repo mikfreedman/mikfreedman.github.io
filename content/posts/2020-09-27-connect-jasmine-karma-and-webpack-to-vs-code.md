@@ -13,7 +13,7 @@ Check out the repository referenced in this post at: [mikfreedman/jasmine-webpac
 
 ### Install VSCode
 
-```bash
+```
 brew cask install visual-studio-code
 ```
 
@@ -21,7 +21,7 @@ brew cask install visual-studio-code
 
 ### Install Node Packages
 
-```bash
+```
 npm install
 ```
 
@@ -38,7 +38,7 @@ Using the *Angular/Karma Test Explorer* extension, you can attach to the Chrome 
 ### Attaching the debugger
 The *Angular/Karma Test Explorer* expects you to setup karma to execute chrome to listen for debugger connections on port **9222**. Here's what the extension's default **launch.json** looks like:
 
-```json
+```
     "angularKarmaTestExplorer.debuggerConfiguration": {
         "name": "Debug tests",
         "type": "chrome",
@@ -58,7 +58,7 @@ The *Angular/Karma Test Explorer* expects you to setup karma to execute chrome t
 
 So we need to setup our [karma.config.js](https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/karma.conf.js) to allow for this connection:
 
-```diff
+```
 -      browsers: ['ChromeHeadless'/*,'PhantomJS','Firefox','Edge','ChromeCanary','Opera','IE','Safari'*/],
 +      browsers: ['ChromeHeadlessDebugging'/*,'PhantomJS','Firefox','Edge','ChromeCanary','Opera','IE','Safari'*/],
 +      customLaunchers: {
@@ -81,7 +81,7 @@ Confirm this works by looking at the extension logs and seeing something like th
 ### Mapping Source
 Get webpack to emit inline source maps in [karma.conf.js](karma.conf.js). Also ask it nicely to not minimize the generated code so that variable names match.
 
-```diff
+```
        webpack: {
 +        devtool: "inline-source-map",
 +        optimization: {
@@ -93,7 +93,7 @@ Get webpack to emit inline source maps in [karma.conf.js](karma.conf.js). Also a
 
 Keep an eye out for errant Chrome instances that gum up the works and generally foster weird behavior.
 
-```bash
+```
 ps -ef | grep 9222 | cut -f 5 -d ' ' | xargs kill
 ```
 
