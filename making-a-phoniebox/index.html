@@ -1,0 +1,208 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Making a Phoniebox - Michael Freedman</title><meta name=Description content="Director, VMware Tanzu"><meta property="og:title" content="Making a Phoniebox">
+<meta property="og:description" content="A Phoniebox is a music Jukebox that plays songs when RFID cards are swiped near it.
+References  Phoniebox installation log · GitHub [Tutorial] Phoniebox Reddit - Finished MusicBox Reddit - RFID Music Box V3 Phoniebox GitHub - MiczFlor/RPi-Jukebox-RFID Installing Phoniebox future3 — RPi Jukebox RFID 3.1.0 documentation  Installation 1. Download Raspbian Buster Lite from https://www.raspberrypi.org/downloads/raspbian/ , using the ZIP download link.
+2. Flash an SD card  Use Etcher to flash SD Card with Buster image Take out SD card, put it back in  3.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mjfreedman.com/making-a-phoniebox/"><meta property="og:image" content="https://mjfreedman.com/images/avatar.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-12-23T11:35:06-05:00">
+<meta property="article:modified_time" content="2021-12-23T11:35:06-05:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://mjfreedman.com/images/avatar.jpg">
+<meta name=twitter:title content="Making a Phoniebox">
+<meta name=twitter:description content="A Phoniebox is a music Jukebox that plays songs when RFID cards are swiped near it.
+References  Phoniebox installation log · GitHub [Tutorial] Phoniebox Reddit - Finished MusicBox Reddit - RFID Music Box V3 Phoniebox GitHub - MiczFlor/RPi-Jukebox-RFID Installing Phoniebox future3 — RPi Jukebox RFID 3.1.0 documentation  Installation 1. Download Raspbian Buster Lite from https://www.raspberrypi.org/downloads/raspbian/ , using the ZIP download link.
+2. Flash an SD card  Use Etcher to flash SD Card with Buster image Take out SD card, put it back in  3.">
+<meta name=application-name content="Michael Freedman">
+<meta name=apple-mobile-web-app-title content="Michael Freedman"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=canonical href=https://mjfreedman.com/making-a-phoniebox/><link rel=prev href=https://mjfreedman.com/use-hugo-with-github-pages/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Making a Phoniebox","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/mjfreedman.com\/making-a-phoniebox\/"},"genre":"posts","wordcount":344,"url":"https:\/\/mjfreedman.com\/making-a-phoniebox\/","datePublished":"2021-12-23T11:35:06-05:00","dateModified":"2021-12-23T11:35:06-05:00","publisher":{"@type":"Organization","name":"Michael Freedman"},"author":{"@type":"Person","name":"Michael Freedman"},"description":""}</script></head>
+<body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Making a Phoniebox</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Michael Freedman</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-12-23>2021-12-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;344 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept=true>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#1-download-raspbian-buster-lite>1. Download Raspbian Buster Lite</a></li>
+<li><a href=#2-flash-an-sd-card>2. Flash an SD card</a></li>
+<li><a href=#3-modify-wifi-settings>3. Modify Wifi settings</a></li>
+<li><a href=#4-boot-the-raspi>4. Boot the Raspi</a></li>
+<li><a href=#5-connect-via-ssh--bootstrap-machine>5. Connect via SSH & Bootstrap Machine</a></li>
+<li><a href=#7-get-sound-device-info>7. Get sound device info</a></li>
+<li><a href=#6-start-phoniebox-install-script>6. Start Phoniebox install script</a></li>
+<li><a href=#7-connect-to-the-web-ui>7. Connect to the web UI</a></li>
+<li><a href=#8-upload-music>8. Upload music</a></li>
+<li><a href=#9-test-audio-playback>9. Test audio playback</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>A <a href=http://phoniebox.de/index-en.html target=_blank rel="noopener noreffer">Phoniebox</a> is a music Jukebox that plays songs when RFID cards are swiped near it.</p>
+<h1 id=references>References</h1>
+<ul>
+<li><a href=https://gist.github.com/marians/95997ae0d83eef688ed9ff5c9cf44b6b target=_blank rel="noopener noreffer">Phoniebox installation log · GitHub</a></li>
+<li><a href=https://koboldimkopf.wordpress.com/2020/01/10/tutorial-phoniebox/ target=_blank rel="noopener noreffer">[Tutorial] Phoniebox</a></li>
+<li><a href=https://www.reddit.com/r/RASPBERRY_PI_PROJECTS/comments/9v7h4x/finished_rfid_musicbox_for_the_kids_based_on/ target=_blank rel="noopener noreffer">Reddit - Finished MusicBox</a></li>
+<li><a href=https://www.reddit.com/r/RASPBERRY_PI_PROJECTS/comments/as2pqh/finished_rfid_music_box_v3_phoniebox/ target=_blank rel="noopener noreffer">Reddit - RFID Music Box V3 Phoniebox</a></li>
+<li><a href=https://github.com/MiczFlor/RPi-Jukebox-RFID target=_blank rel="noopener noreffer">GitHub - MiczFlor/RPi-Jukebox-RFID</a></li>
+<li><a href=https://rpi-jukebox-rfid.readthedocs.io/en/latest/install.html target=_blank rel="noopener noreffer">Installing Phoniebox future3 — RPi Jukebox RFID 3.1.0 documentation</a></li>
+</ul>
+<h1 id=installation>Installation</h1>
+<h2 id=1-download-raspbian-buster-lite>1. Download Raspbian Buster Lite</h2>
+<p>from <a href=https://www.raspberrypi.org/downloads/raspbian/ target=_blank rel="noopener noreffer">https://www.raspberrypi.org/downloads/raspbian/</a> , using the ZIP download link.</p>
+<h2 id=2-flash-an-sd-card>2. Flash an SD card</h2>
+<ol>
+<li>Use Etcher to flash SD Card with Buster image</li>
+<li>Take out SD card, put it back in</li>
+</ol>
+<h2 id=3-modify-wifi-settings>3. Modify Wifi settings</h2>
+<ol>
+<li>Open SD card partition &ldquo;boot&rdquo;</li>
+<li>Create file <code>ssh</code></li>
+<li>Create file <code>wpa_supplicant.conf</code> as described in <a href=https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/ target=_blank rel="noopener noreffer">https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/</a></li>
+</ol>
+<h2 id=4-boot-the-raspi>4. Boot the Raspi</h2>
+<ol>
+<li>Insert the card</li>
+<li>Plug in the card reader</li>
+<li>Plug in the USB audio device (optional)</li>
+<li>Plugin monitor and keyboard (optional)</li>
+</ol>
+<h2 id=5-connect-via-ssh--bootstrap-machine>5. Connect via SSH & Bootstrap Machine</h2>
+<ol>
+<li>Find IP address via router admin UI</li>
+<li>Connect: <code>ssh pi@&lt;ip-address></code></li>
+<li>Create <code>.ssh/authorized_keys</code> and add own public RSA key</li>
+<li>Change password for pi user using <code>passwd</code></li>
+<li>Setup private key access</li>
+<li>Disable Password authentication for ssh in <code>/etc/sshd_config</code></li>
+<li><a href=https://www.tomshardware.com/how-to/raspberry-pi-change-hostname target=_blank rel="noopener noreffer">Set Hostname</a></li>
+</ol>
+<h2 id=7-get-sound-device-info>7. Get sound device info</h2>
+<ol>
+<li>Setup DT Overlay for HiFiBerry MiniAmp</li>
+</ol>
+<pre tabindex=0><code>#/boot/config.txt
+dtoverlay=hifiberry-dac
+</code></pre><pre tabindex=0><code>#/etc/asound.conf
+pcm.hifiberry {
+    type softvol
+    slave.pcm &quot;plughw:0&quot;
+    control.name &quot;Master&quot;
+    control.card 0
+}
+pcm.!default {
+    type plug
+    slave.pcm &quot;hifiberry&quot;
+}
+</code></pre><ol start=2>
+<li>Reboot</li>
+</ol>
+<p>Use this info in the next step.</p>
+<h2 id=6-start-phoniebox-install-script>6. Start Phoniebox install script</h2>
+<p>From <a href=https://github.com/MiczFlor/RPi-Jukebox-RFID/wiki/INSTALL-stretch#one-line-install-command target=_blank rel="noopener noreffer">https://github.com/MiczFlor/RPi-Jukebox-RFID/wiki/INSTALL-stretch#one-line-install-command</a></p>
+<pre tabindex=0><code>rm buster-install-*
+wget https://raw.githubusercontent.com/MiczFlor/RPi-Jukebox-RFID/master/scripts/installscripts/buster-install-default.sh
+chmod +x buster-install-default.sh
+./buster-install-default.sh
+</code></pre><p>Follow the interactive prompt.</p>
+<p>If you are connected via Wifi already, skip the Wifi setup.</p>
+<p>WiFi -> n</p>
+<p>PCM as iFace -> no, should be „Master“ (if you use a HiFiBerry MiniAmp)</p>
+<p>mpd -> y</p>
+<p>default locations -> y</p>
+<p>Start the first part of the installation with another y and wait some time.</p>
+<h2 id=7-connect-to-the-web-ui>7. Connect to the web UI</h2>
+<ol>
+<li>Use <code>ifconfig | grep inet</code> to find the Raspi&rsquo;s IP address.</li>
+<li>In a browser, connect to <code>http://&lt;ip-address>/</code> to open the Phoniebox web UI.</li>
+</ol>
+<h2 id=8-upload-music>8. Upload music</h2>
+<ol>
+<li>Have some MP3 files ready</li>
+<li>Go to &ldquo;Folders & Files&rdquo; to upload music files into new folders</li>
+</ol>
+<h2 id=9-test-audio-playback>9. Test audio playback</h2>
+<ol>
+<li>maybe disable <code>mpd</code> if it doesn&rsquo;t work right?</li>
+</ol>
+<pre tabindex=0><code>sudo systemctl disable mpd
+</code></pre></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2021-12-23</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://mjfreedman.com/making-a-phoniebox/ data-title="Making a Phoniebox"><i class="fab fa-twitter fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/use-hugo-with-github-pages/ class=prev rel=prev title="Use Hugo With Github Pages"><i class="fas fa-angle-left fa-fw"></i>Use Hugo With Github Pages</a></div>
+</div>
+</article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Michael Freedman</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:20},comment:{}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

@@ -1,0 +1,162 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Cloud Foundry Meetup Talk - Michael Freedman</title><meta name=Description content="In this talk I covered routing, the CF CLI, User Provided Services (including programmatic access), and remote debugging with the Java Buildpack."><meta property="og:title" content="Cloud Foundry Meetup Talk">
+<meta property="og:description" content="In this talk I covered routing, the CF CLI, User Provided Services (including programmatic access), and remote debugging with the Java Buildpack.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mjfreedman.com/2015-11-26-cloud-foundry-meetup-talk/"><meta property="og:image" content="https://mjfreedman.com/images/avatar.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2015-11-26T06:09:34+00:00">
+<meta property="article:modified_time" content="2015-11-26T06:09:34+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://mjfreedman.com/images/avatar.jpg">
+<meta name=twitter:title content="Cloud Foundry Meetup Talk">
+<meta name=twitter:description content="In this talk I covered routing, the CF CLI, User Provided Services (including programmatic access), and remote debugging with the Java Buildpack.">
+<meta name=application-name content="Michael Freedman">
+<meta name=apple-mobile-web-app-title content="Michael Freedman"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=canonical href=https://mjfreedman.com/2015-11-26-cloud-foundry-meetup-talk/><link rel=next href=https://mjfreedman.com/2017-06-24-ghost-on-cf/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Cloud Foundry Meetup Talk","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/mjfreedman.com\/2015-11-26-cloud-foundry-meetup-talk\/"},"genre":"posts","wordcount":55,"url":"https:\/\/mjfreedman.com\/2015-11-26-cloud-foundry-meetup-talk\/","datePublished":"2015-11-26T06:09:34+00:00","dateModified":"2015-11-26T06:09:34+00:00","publisher":{"@type":"Organization","name":"Michael Freedman"},"author":{"@type":"Person","name":"Michael Freedman"},"description":"In this talk I covered routing, the CF CLI, User Provided Services (including programmatic access), and remote debugging with the Java Buildpack."}</script></head>
+<body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Cloud Foundry Meetup Talk</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Michael Freedman</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2015-11-26>2015-11-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;55 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;</div>
+</div><div class="details toc" id=toc-static kept=true>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents></nav></div>
+</div><div class=content id=content><p><img class=lazyload src=/svg/loading.min.svg data-src=https://pbs.twimg.com/media/CUuavAAVEAALYGG.jpg data-srcset="https://pbs.twimg.com/media/CUuavAAVEAALYGG.jpg, https://pbs.twimg.com/media/CUuavAAVEAALYGG.jpg 1.5x, https://pbs.twimg.com/media/CUuavAAVEAALYGG.jpg 2x" data-sizes=auto alt=https://pbs.twimg.com/media/CUuavAAVEAALYGG.jpg title=Talk></p>
+<p>Here&rsquo;s what I covered:</p>
+<ol>
+<li>Routing</li>
+<li>The Cloud Foundry CLI</li>
+</ol>
+<ul>
+<li>Plugins</li>
+<li>CF Trace</li>
+</ul>
+<ol>
+<li>Services</li>
+</ol>
+<ul>
+<li>User Provided</li>
+<li>Programmatic Access</li>
+</ul>
+<ol>
+<li>Debugging Java</li>
+</ol>
+<ul>
+<li>The Buildpack</li>
+<li>Remote Debug</li>
+</ul>
+<p>Here are the links:</p>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pr Shaved Yak</td>
+<td><a href=http://preshavedyak.com target=_blank rel="noopener noreffer">http://preshavedyak.com</a></td>
+</tr>
+<tr>
+<td>Onsi&rsquo;s Talk on Diego</td>
+<td><a href=https://youtu.be/1OkmVTFhfLY target=_blank rel="noopener noreffer">https://youtu.be/1OkmVTFhfLY</a></td>
+</tr>
+<tr>
+<td>Autopilot (Blue Green)</td>
+<td><a href=https://github.com/concourse/autopilot target=_blank rel="noopener noreffer">https://github.com/concourse/autopilot</a></td>
+</tr>
+<tr>
+<td>The Twelve Factor App</td>
+<td><a href=http://12factor.net/ target=_blank rel="noopener noreffer">http://12factor.net/</a></td>
+</tr>
+<tr>
+<td>jq (JSON)</td>
+<td><a href=https://stedolan.github.io/jq/ target=_blank rel="noopener noreffer">https://stedolan.github.io/jq/</a></td>
+</tr>
+<tr>
+<td>cf CLI</td>
+<td><a href=https://docs.cloudfoundry.org/devguide/installcf/ target=_blank rel="noopener noreffer">https://docs.cloudfoundry.org/devguide/installcf/</a></td>
+</tr>
+</tbody>
+</table>
+<p><a href=/assets/talk.html rel> Slides Here </a></p>
+</div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2015-11-26</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav>
+<a href=/2017-06-24-ghost-on-cf/ class=next rel=next title="Running Ghost on Cloud Foundry">Running Ghost on Cloud Foundry<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Michael Freedman</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:20},comment:{}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

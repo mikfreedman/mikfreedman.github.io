@@ -1,0 +1,122 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Use Hugo With Github Pages - Michael Freedman</title><meta name=Description content="Director, VMware Tanzu"><meta property="og:title" content="Use Hugo With Github Pages">
+<meta property="og:description" content="By default Github Pages works automatically with Jekyll which is great! Sometimes though you want to try a different static site generator like say Hugo; the good news is that with a little bit of jiggery pokery it&rsquo;s actually pretty easy to so!">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mjfreedman.com/use-hugo-with-github-pages/"><meta property="og:image" content="https://mjfreedman.com/images/avatar.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-05-03T14:00:19-04:00">
+<meta property="article:modified_time" content="2021-05-03T14:00:19-04:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://mjfreedman.com/images/avatar.jpg">
+<meta name=twitter:title content="Use Hugo With Github Pages">
+<meta name=twitter:description content="By default Github Pages works automatically with Jekyll which is great! Sometimes though you want to try a different static site generator like say Hugo; the good news is that with a little bit of jiggery pokery it&rsquo;s actually pretty easy to so!">
+<meta name=application-name content="Michael Freedman">
+<meta name=apple-mobile-web-app-title content="Michael Freedman"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=canonical href=https://mjfreedman.com/use-hugo-with-github-pages/><link rel=prev href=https://mjfreedman.com/2020-09-27-connect-jasmine-karma-and-webpack-to-vs-code/><link rel=next href=https://mjfreedman.com/making-a-phoniebox/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Use Hugo With Github Pages","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/mjfreedman.com\/use-hugo-with-github-pages\/"},"genre":"posts","wordcount":268,"url":"https:\/\/mjfreedman.com\/use-hugo-with-github-pages\/","datePublished":"2021-05-03T14:00:19-04:00","dateModified":"2021-05-03T14:00:19-04:00","publisher":{"@type":"Organization","name":"Michael Freedman"},"author":{"@type":"Person","name":"Michael Freedman"},"description":""}</script></head>
+<body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Use Hugo With Github Pages</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Michael Freedman</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-05-03>2021-05-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;268 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept=true>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents></nav></div>
+</div><div class=content id=content><p>By default <a href=https://pages.github.com/ target=_blank rel="noopener noreffer">Github Pages</a> works automatically with <a href=https://jekyllrb.com/ target=_blank rel="noopener noreffer">Jekyll</a> which is great! Sometimes though you want to try a different static site generator like say <a href=https://gohugo.io/ target=_blank rel="noopener noreffer">Hugo</a>; the good news is that with a little bit of jiggery pokery it&rsquo;s actually pretty easy to so!</p>
+<p>For the most part, I followed <a href=https://gohugo.io/hosting-and-deployment/hosting-on-github/ target=_blank rel="noopener noreffer">these instructions</a> to get setup. But there were some important things I needed to understand before it could work.</p>
+<p>First of all you can in fact host a personal site (e.g. repo: <code>[username].github.io</code>) that publishes a different branch than <code>main</code>, this means you don&rsquo;t need two repositories as some guides suggest.</p>
+<p>You can basically use the Github Action from the instructions above almost verbatim. <a href=https://github.com/marketplace/actions/hugo-setup target=_blank rel="noopener noreffer">That action</a> will create a branch called <code>gh-pages</code> and commit the generated site to its root directory. This means that Github Pages will not try and run Jekyll because it will detect a static site at the <code>gh-pages</code> branch and just publish that.</p>
+<p>For whatever reason, understanding how that all works took me a while and wasn&rsquo;t immediately obvious (to me) from the documentation.</p>
+<p>Here is the workflow:</p>
+<p><strong>Initial Setup</strong></p>
+<ul>
+<li>Create a repository on Github called <code>[yourusername].github.io</code></li>
+<li>Push your newly created Hugo site to it as is</li>
+<li>Add the Github Action shown in <a href=https://gohugo.io/hosting-and-deployment/hosting-on-github/ target=_blank rel="noopener noreffer">the instructions</a> to your repo</li>
+<li>Push that action (and make sure it runs)</li>
+<li>Go to your repo settings and select <code>gh-pages</code> branch for publishing, ignoring any Jekyll errors you see on the way</li>
+<li>Make a change to your site and push it once more</li>
+<li>Confirm that the site is published!</li>
+</ul>
+<p><strong>Ongoing</strong></p>
+<ul>
+<li>Push changes as normal</li>
+<li>Confirm that the Github Action executed successfully</li>
+</ul></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2021-05-03</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://mjfreedman.com/use-hugo-with-github-pages/ data-title="Use Hugo With Github Pages"><i class="fab fa-twitter fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/2020-09-27-connect-jasmine-karma-and-webpack-to-vs-code/ class=prev rel=prev title="Connect Jasmine, Karma, and Webpack to VS Code"><i class="fas fa-angle-left fa-fw"></i>Connect Jasmine, Karma, and Webpack to VS Code</a>
+<a href=/making-a-phoniebox/ class=next rel=next title="Making a Phoniebox">Making a Phoniebox<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Michael Freedman</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:20},comment:{}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

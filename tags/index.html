@@ -1,28 +1,64 @@
----
-layout: post-index
-title: Tag Archive
-description: "An archive of posts sorted by tag."
-comments: false
----
-
-{% capture site_tags %}{% for tag in site.tags %}{{ tag | first }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endcapture %}
-{% assign tags_list = site_tags | split:',' | sort %}
-
-<ul class="entry-meta inline-list">
-  {% for item in (0..site.tags.size) %}{% unless forloop.last %}
-    {% capture this_word %}{{ tags_list[item] | strip_newlines }}{% endcapture %}
-  	<li><a href="#{{ this_word }}" class="tag"><span class="term">{{ this_word }}</span> <span class="count">{{ site.tags[this_word].size }}</span></a></li>
-  {% endunless %}{% endfor %}
-</ul>
-
-{% for item in (0..site.tags.size) %}{% unless forloop.last %}
-  {% capture this_word %}{{ tags_list[item] | strip_newlines }}{% endcapture %}
-	<article>
-	<h2 id="{{ this_word }}" class="tag-heading">{{ this_word }}</h2>
-		<ul>
-    {% for post in site.tags[this_word] %}{% if post.title != null %}
-      <li class="entry-title"><a href="{{ site.url }}{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></li>
-    {% endif %}{% endfor %}
-		</ul>
-	</article><!-- /.hentry -->
-{% endunless %}{% endfor %}
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>All Tags - Michael Freedman</title><meta name=Description content="Director, VMware Tanzu"><meta property="og:title" content="Tags">
+<meta property="og:description" content="Director, VMware Tanzu">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mjfreedman.com/tags/"><meta property="og:image" content="https://mjfreedman.com/images/avatar.jpg">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://mjfreedman.com/images/avatar.jpg">
+<meta name=twitter:title content="Tags">
+<meta name=twitter:description content="Director, VMware Tanzu">
+<meta name=application-name content="Michael Freedman">
+<meta name=apple-mobile-web-app-title content="Michael Freedman"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=canonical href=https://mjfreedman.com/tags/><link rel=alternate href=/tags/index.xml type=application/rss+xml title="Michael Freedman">
+<link rel=feed href=/tags/index.xml type=application/rss+xml title="Michael Freedman"><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css></head>
+<body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class="page archive"><h2 class="single-title animated pulse faster">All Tags</h2><div class=tag-cloud-tags><a href=/tags/cloudfoundry/>cloudfoundry <sup>1</sup></a><a href=/tags/concourse/>concourse <sup>1</sup></a><a href=/tags/fly/>fly <sup>1</sup></a><a href=/tags/pws/>pws <sup>1</sup></a></div></div></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Michael Freedman</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:20}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

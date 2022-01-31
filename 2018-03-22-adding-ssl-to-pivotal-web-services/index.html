@@ -1,0 +1,179 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Adding SSL to Pivotal Web Services (PWS) - Michael Freedman</title><meta name=Description content="Director, VMware Tanzu"><meta property="og:title" content="Adding SSL to Pivotal Web Services (PWS)">
+<meta property="og:description" content="If you have registered a custom domain that you would like to use with Pivotal Web Services (PWS) or any other Cloud Foundry instance, you may also want to use SSL, here&rsquo;s how.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mjfreedman.com/2018-03-22-adding-ssl-to-pivotal-web-services/"><meta property="og:image" content="https://mjfreedman.com/images/avatar.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2018-03-22T00:00:00+00:00">
+<meta property="article:modified_time" content="2017-08-03T11:21:44-04:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://mjfreedman.com/images/avatar.jpg">
+<meta name=twitter:title content="Adding SSL to Pivotal Web Services (PWS)">
+<meta name=twitter:description content="If you have registered a custom domain that you would like to use with Pivotal Web Services (PWS) or any other Cloud Foundry instance, you may also want to use SSL, here&rsquo;s how.">
+<meta name=application-name content="Michael Freedman">
+<meta name=apple-mobile-web-app-title content="Michael Freedman"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=canonical href=https://mjfreedman.com/2018-03-22-adding-ssl-to-pivotal-web-services/><link rel=prev href=https://mjfreedman.com/2017-08-03-concourse-fly-repl/><link rel=next href=https://mjfreedman.com/2020-09-27-connect-jasmine-karma-and-webpack-to-vs-code/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Adding SSL to Pivotal Web Services (PWS)","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/mjfreedman.com\/2018-03-22-adding-ssl-to-pivotal-web-services\/"},"genre":"posts","keywords":"pws, cloudfoundry","wordcount":558,"url":"https:\/\/mjfreedman.com\/2018-03-22-adding-ssl-to-pivotal-web-services\/","datePublished":"2018-03-22T00:00:00+00:00","dateModified":"2017-08-03T11:21:44-04:00","publisher":{"@type":"Organization","name":"Michael Freedman"},"author":{"@type":"Person","name":"Michael Freedman"},"description":""}</script></head>
+<body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Adding SSL to Pivotal Web Services (PWS)</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Michael Freedman</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2018-03-22>2018-03-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;558 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept=true>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#create-a-domain-on-pws>Create a domain on PWS</a></li>
+<li><a href=#update-your-dns-records>Update your DNS records</a></li>
+<li><a href=#create-and-map-your-route>Create and map your route</a></li>
+<li><a href=#setup-an-ssl-certificate>Setup an SSL Certificate.</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>If you have registered a custom domain that you would like to use with <a href=https://run.pivotal.io/ target=_blank rel="noopener noreffer">Pivotal Web Services</a> (PWS) or any other Cloud Foundry instance, you may <strong>also</strong> want to use SSL, here&rsquo;s how.</p>
+<p>These instructions were cribbed from the following places:</p>
+<ul>
+<li><a href=https://docs.run.pivotal.io/devguide/deploy-apps/routes-domains.html target=_blank rel="noopener noreffer">Routes and Domains</a></li>
+<li><a href=https://docs.run.pivotal.io/marketplace/pivotal-ssl.html target=_blank rel="noopener noreffer">Pivotal SSL</a></li>
+<li><a href=https://certbot.eff.org/ target=_blank rel="noopener noreffer">Certbot</a></li>
+<li><a href=https://letsencrypt.org/ target=_blank rel="noopener noreffer">Let&rsquo;s Encrypt</a></li>
+</ul>
+<h2 id=create-a-domain-on-pws>Create a domain on PWS</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cf create-domain space-name example.com
+</code></pre></div><ul>
+<li>You must be an org manager to create domain like this.</li>
+</ul>
+<h2 id=update-your-dns-records>Update your DNS records</h2>
+<p>I chose to only map a single subdomain to PWS, which used a CNAME record to alias the entry for my application, see <a href=https://docs.run.pivotal.io/devguide/deploy-apps/routes-domains.html target=_blank rel="noopener noreffer">the instructions</a> for more details.</p>
+<pre tabindex=0><code>app.example.com. CNAME app.cfapps.io # example DNS configuration
+</code></pre><h2 id=create-and-map-your-route>Create and map your route</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash> cf create-route app example.com
+ cf map-route application example.com --hostname app
+</code></pre></div><ul>
+<li>Note that you <strong>need</strong> to have both this route, and the cf app domain route mapped for this to work. In the case of PWS this route will be <em>app.cfapps.io</em>. You may at this point want to update your application&rsquo;s reference to its URL (not always necessary).</li>
+</ul>
+<h2 id=setup-an-ssl-certificate>Setup an SSL Certificate.</h2>
+<p>Obtain an SSL Certificate for your domain from somewhere.</p>
+<p>I used the instructions at: <a href=https://certbot.eff.org/ target=_blank rel="noopener noreffer">certbot</a> to obtain a free certificate. It turns out, the Certbot command line application has to be installed on the server itself to work correctly!</p>
+<p>I temporarily pointed an <em>ANAME</em> record at a VM I spun up, and ran the <em>certbot</em> commandline tool on that VM in standalone mode. This allowed <em>certbot</em> to verify my ownership of the domain, and subsequently issue a certificate, which I downloaded to my local machine.</p>
+<p>Alternatively, you can easily use certbot manually with a dns challenge from your local machine, like so:</p>
+<pre tabindex=0><code>sudo certbot -d example.com --manual --preferred-challenges dns certonly
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Plugins selected: Authenticator manual, Installer None
+Obtaining a new certificate
+Performing the following challenges:
+dns-01 challenge for blog.apbg.io
+
+-------------------------------------------------------------------------------
+NOTE: The IP of this machine will be publicly logged as having requested this
+certificate. If you're running certbot in manual mode on a machine that is not
+your server, please ensure you're okay with that.
+
+Are you OK with your IP being logged?
+-------------------------------------------------------------------------------
+(Y)es/(N)o: Y
+
+-------------------------------------------------------------------------------
+Please deploy a DNS TXT record under the name
+_acme-challenge.blog.apbg.io with the following value:
+
+&lt;acme-challenge-key&gt;
+
+Before continuing, verify the record is deployed.
+-------------------------------------------------------------------------------
+Press Enter to Continue
+Waiting for verification...
+Cleaning up challenges
+</code></pre><p>You may be able to script this refresh by checking out some of the solutions here: <a href=https://serverfault.com/questions/750902/how-to-use-lets-encrypt-dns-challenge-validation target=_blank rel="noopener noreffer">How to use Let&rsquo;s Encrypt DNS challenge validation?</a>, how this works with Pivotal&rsquo;s SSL service is left as an exercise for the reader.</p>
+<p>I then used the Pivotal SSL service to register this cert on PWS.</p>
+<pre tabindex=0><code>$ cf create-service ssl basic app.example.com # create SSL service
+$ cf service app.example.com
+
+
+Service instance: app.example.com
+Service: ssl
+Bound apps:
+Tags:
+Plan: basic
+Description: Upload your SSL certificate for your app(s) on your custom domain
+Documentation url: http://docs.run.pivotal.io/marketplace/pivotal-ssl.html
+Dashboard: https://ssl-service.run.pivotal.io/instances/instance-id
+</code></pre><p>I followed the Dashboard link in my browser, and uploaded my certificate file and private key that were generated earlier.</p>
+<p>Once I had obtained my SSL alias address from the Dashboard, which looked something like: <em>app.example.com-190091.ssl.run.pivotal.io</em> I updated my <em>CNAME</em> record accordingly.</p>
+<p>After waiting until everything delegated correctly, I was able to access my PWS hosted site securely using SSL, via the link: <a href=https://app.example.com target=_blank rel="noopener noreffer">https://app.example.com</a>. I was able to setup up http -> https redirection as well.</p></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2017-08-03</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/pws/>pws</a>,&nbsp;<a href=/tags/cloudfoundry/>cloudfoundry</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/2017-08-03-concourse-fly-repl/ class=prev rel=prev title="Concourse Fly REPL"><i class="fas fa-angle-left fa-fw"></i>Concourse Fly REPL</a>
+<a href=/2020-09-27-connect-jasmine-karma-and-webpack-to-vs-code/ class=next rel=next title="Connect Jasmine, Karma, and Webpack to VS Code">Connect Jasmine, Karma, and Webpack to VS Code<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Michael Freedman</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:20},comment:{}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>

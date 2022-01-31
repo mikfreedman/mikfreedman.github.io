@@ -1,0 +1,139 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Running Ghost on Cloud Foundry - Michael Freedman</title><meta name=Description content="Director, VMware Tanzu"><meta property="og:title" content="Running Ghost on Cloud Foundry">
+<meta property="og:description" content="At work, we often create blogs for our projects so that we can easily share out progress, and more importantly show people pretty pictures of our progress.
+Often we will use a public blog service like tumblr to create a password protected blog, which is convenient and probably the right way to go.
+Occasionally we will work with a client who cannot or will not use a public service like tumblr and so we need another way.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mjfreedman.com/2017-06-24-ghost-on-cf/"><meta property="og:image" content="https://mjfreedman.com/images/avatar.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2017-06-24T00:00:00+00:00">
+<meta property="article:modified_time" content="2017-06-24T00:00:00+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://mjfreedman.com/images/avatar.jpg">
+<meta name=twitter:title content="Running Ghost on Cloud Foundry">
+<meta name=twitter:description content="At work, we often create blogs for our projects so that we can easily share out progress, and more importantly show people pretty pictures of our progress.
+Often we will use a public blog service like tumblr to create a password protected blog, which is convenient and probably the right way to go.
+Occasionally we will work with a client who cannot or will not use a public service like tumblr and so we need another way.">
+<meta name=application-name content="Michael Freedman">
+<meta name=apple-mobile-web-app-title content="Michael Freedman"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=canonical href=https://mjfreedman.com/2017-06-24-ghost-on-cf/><link rel=prev href=https://mjfreedman.com/2015-11-26-cloud-foundry-meetup-talk/><link rel=next href=https://mjfreedman.com/2017-08-03-concourse-fly-repl/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Running Ghost on Cloud Foundry","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/mjfreedman.com\/2017-06-24-ghost-on-cf\/"},"genre":"posts","wordcount":313,"url":"https:\/\/mjfreedman.com\/2017-06-24-ghost-on-cf\/","datePublished":"2017-06-24T00:00:00+00:00","dateModified":"2017-06-24T00:00:00+00:00","publisher":{"@type":"Organization","name":"Michael Freedman"},"author":{"@type":"Person","name":"Michael Freedman"},"description":""}</script></head>
+<body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Michael Freedman">Michael Freedman</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Running Ghost on Cloud Foundry</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Michael Freedman</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2017-06-24>2017-06-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;313 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept=true>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#cloud-nativeness>Cloud Nativeness</a>
+<ul>
+<li><a href=#configuration>Configuration</a></li>
+<li><a href=#file-storage>File storage</a></li>
+</ul>
+</li>
+<li><a href=#more-details>More details</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>At work, we often create blogs for our projects so that we can easily share out progress, and more importantly show people pretty pictures of our progress.</p>
+<p>Often we will use a public blog service like <a href=https://www.tumblr.com/ target=_blank rel="noopener noreffer">tumblr</a> to create a password protected blog, which is convenient and probably the right way to go.</p>
+<p>Occasionally we will work with a client who cannot or will not use a public service like tumblr and so we need another way.</p>
+<p>I have created a github repository: <a href=https://github.com/mikfreedman/ghost-on-cf target=_blank rel="noopener noreffer">mikfreedman/ghost-on-cf</a> which illustrates how you can deploy the popular blog software <a href=https://ghost.org/ target=_blank rel="noopener noreffer">Ghost</a> onto <a href=https://www.cloudfoundry.org/ target=_blank rel="noopener noreffer">Cloud Foundry</a>, a PaaS that many of our clients are using.</p>
+<p>This repository externalizes the necessary config that needs to change for Ghost, and actually installs the software itself as an npm module.</p>
+<p>This is great, because the traditional approach to configuring Ghost recommends editing a bunch of files and adding random directories all over the place - which doesn&rsquo;t sound very <a href=https://pivotal.io/cloud-native target=_blank rel="noopener noreffer">cloud native</a>.</p>
+<h2 id=cloud-nativeness>Cloud Nativeness</h2>
+<p>One of the main tenets of a <a href=https://12factor.net/ target=_blank rel="noopener noreffer">twelve-factor app</a> is that we don&rsquo;t store things on the local filesystem, and we store configuration in the environment.</p>
+<h3 id=configuration>Configuration</h3>
+<p>If you checkout <a href=https://github.com/mikfreedman/ghost-on-cf/blob/master/config.js target=_blank rel="noopener noreffer">config.js</a> you will see a bunch of code that supports environment based configuration like:</p>
+<pre tabindex=0><code># Blobber Configuration
+'ghost-blobber-service': {
+  url: process.env.BLOBBER_API_URL,
+  apiKey: process.env.BLOBBER_API_KEY
+}
+</code></pre><p>or</p>
+<pre tabindex=0><code> var creds = appEnv.getService(&quot;ghost-mysql&quot;).credentials;
+</code></pre><p>The second example utilizes the nice <a href=https://github.com/cloudfoundry-community/node-cfenv target=_blank rel="noopener noreffer">cfenv</a> node module.</p>
+<h3 id=file-storage>File storage</h3>
+<p>By default, Ghost will store uploaded images on the local filesystem, which is also not great from a 12-Factor point of view, this can be fixed by using a <a href=https://docs.ghost.org/docs/using-a-custom-storage-module target=_blank rel="noopener noreffer">custom storage module</a>.</p>
+<p>This project is setup to use either S3 or a really basic storage service I wrote called <a href=https://github.com/mikfreedman/blobber target=_blank rel="noopener noreffer">blobber</a> (caveat emptor). The blobber service requires a custom storage module called <a href=https://github.com/mikfreedman/ghost-blobber-service target=_blank rel="noopener noreffer">ghost-blobber-service</a></p>
+<h2 id=more-details>More details</h2>
+<p>Follow the more detailed instructions in the <a href=https://github.com/mikfreedman/ghost-on-cf/blob/master/README target=_blank rel="noopener noreffer">README</a> and then immediately profit from a cf deployed blog.</p>
+</div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2017-06-24</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/2015-11-26-cloud-foundry-meetup-talk/ class=prev rel=prev title="Cloud Foundry Meetup Talk"><i class="fas fa-angle-left fa-fw"></i>Cloud Foundry Meetup Talk</a>
+<a href=/2017-08-03-concourse-fly-repl/ class=next rel=next title="Concourse Fly REPL">Concourse Fly REPL<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Michael Freedman</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:20},comment:{}}</script><script type=text/javascript src=/js/theme.min.js></script></body>
+</html>
