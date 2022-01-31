@@ -64,17 +64,17 @@
 <li><a href=https://letsencrypt.org/ target=_blank rel="noopener noreffer">Let&rsquo;s Encrypt</a></li>
 </ul>
 <h2 id=create-a-domain-on-pws>Create a domain on PWS</h2>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cf create-domain space-name example.com
-</code></pre></div><ul>
+<pre tabindex=0><code>cf create-domain space-name example.com
+</code></pre><ul>
 <li>You must be an org manager to create domain like this.</li>
 </ul>
 <h2 id=update-your-dns-records>Update your DNS records</h2>
 <p>I chose to only map a single subdomain to PWS, which used a CNAME record to alias the entry for my application, see <a href=https://docs.run.pivotal.io/devguide/deploy-apps/routes-domains.html target=_blank rel="noopener noreffer">the instructions</a> for more details.</p>
 <pre tabindex=0><code>app.example.com. CNAME app.cfapps.io # example DNS configuration
 </code></pre><h2 id=create-and-map-your-route>Create and map your route</h2>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash> cf create-route app example.com
+<pre tabindex=0><code> cf create-route app example.com
  cf map-route application example.com --hostname app
-</code></pre></div><ul>
+</code></pre><ul>
 <li>Note that you <strong>need</strong> to have both this route, and the cf app domain route mapped for this to work. In the case of PWS this route will be <em>app.cfapps.io</em>. You may at this point want to update your application&rsquo;s reference to its URL (not always necessary).</li>
 </ul>
 <h2 id=setup-an-ssl-certificate>Setup an SSL Certificate.</h2>

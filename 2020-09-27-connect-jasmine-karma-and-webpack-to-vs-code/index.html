@@ -59,57 +59,57 @@
 <p>Check out the repository referenced in this post at: <a href=https://github.com/mikfreedman/jasmine-webpack-vscode target=_blank rel="noopener noreffer">mikfreedman/jasmine-webpack-vscode</a></p>
 <h2 id=installation>Installation</h2>
 <h3 id=install-vscode>Install VSCode</h3>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>brew cask install visual-studio-code
-</code></pre></div><h3 id=install-angularkarma-test-explorer-for-visual-studio-codehttpsmarketplacevisualstudiocomitemsitemnameraaghangular-karma-test-explorer>Install <a href="https://marketplace.visualstudio.com/items?itemName=raagh.angular-karma-test-explorer" target=_blank rel="noopener noreffer">Angular/Karma Test Explorer for Visual Studio Code</a></h3>
+<pre tabindex=0><code>brew cask install visual-studio-code
+</code></pre><h3 id=install-angularkarma-test-explorer-for-visual-studio-codehttpsmarketplacevisualstudiocomitemsitemnameraaghangular-karma-test-explorer>Install <a href="https://marketplace.visualstudio.com/items?itemName=raagh.angular-karma-test-explorer" target=_blank rel="noopener noreffer">Angular/Karma Test Explorer for Visual Studio Code</a></h3>
 <h3 id=install-node-packages>Install Node Packages</h3>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>npm install
-</code></pre></div><h2 id=test-for-great-success>Test For Great Success</h2>
+<pre tabindex=0><code>npm install
+</code></pre><h2 id=test-for-great-success>Test For Great Success</h2>
 <p>Use the &ldquo;Test Explorer&rdquo; in VS Code to run / debug tests</p>
 <p>Break right into your code, with variable names and everything!</p>
 <h2 id=how-it-works>How it works</h2>
 <p>Using the <em>Angular/Karma Test Explorer</em> extension, you can attach to the Chrome instance that&rsquo;s running your Karma tests. The following configuration makes this work: <a href=https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/karma.conf.js target=_blank rel="noopener noreffer">karma.conf.js</a>, <a href=https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/.vscode/settings.json target=_blank rel="noopener noreffer">.vscode/settings.json</a>. The repo contains step by step diffs in its git log, I&rsquo;ve detailed some key points below.</p>
 <h3 id=attaching-the-debugger>Attaching the debugger</h3>
 <p>The <em>Angular/Karma Test Explorer</em> expects you to setup karma to execute chrome to listen for debugger connections on port <strong>9222</strong>. Here&rsquo;s what the extension&rsquo;s default <strong>launch.json</strong> looks like:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>    <span style=color:#e6db74>&#34;angularKarmaTestExplorer.debuggerConfiguration&#34;</span><span style=color:#960050;background-color:#1e0010>:</span> {
-        <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;Debug tests&#34;</span>,
-        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;chrome&#34;</span>,
-        <span style=color:#f92672>&#34;request&#34;</span>: <span style=color:#e6db74>&#34;attach&#34;</span>,
-        <span style=color:#f92672>&#34;port&#34;</span>: <span style=color:#ae81ff>9222</span>,
-        <span style=color:#f92672>&#34;sourceMaps&#34;</span>: <span style=color:#66d9ef>true</span>,
-        <span style=color:#f92672>&#34;webRoot&#34;</span>: <span style=color:#e6db74>&#34;${workspaceRoot}&#34;</span>,
-        <span style=color:#f92672>&#34;sourceMapPathOverrides&#34;</span>: {
-            <span style=color:#f92672>&#34;webpack:/*&#34;</span>: <span style=color:#e6db74>&#34;${webRoot}/*&#34;</span>,
-            <span style=color:#f92672>&#34;/./*&#34;</span>: <span style=color:#e6db74>&#34;${webRoot}/*&#34;</span>,
-            <span style=color:#f92672>&#34;/src/*&#34;</span>: <span style=color:#e6db74>&#34;${webRoot}/*&#34;</span>,
-            <span style=color:#f92672>&#34;/*&#34;</span>: <span style=color:#e6db74>&#34;*&#34;</span>,
-            <span style=color:#f92672>&#34;/./~/*&#34;</span>: <span style=color:#e6db74>&#34;${webRoot}/node_modules/*&#34;</span>
+<pre tabindex=0><code>    &quot;angularKarmaTestExplorer.debuggerConfiguration&quot;: {
+        &quot;name&quot;: &quot;Debug tests&quot;,
+        &quot;type&quot;: &quot;chrome&quot;,
+        &quot;request&quot;: &quot;attach&quot;,
+        &quot;port&quot;: 9222,
+        &quot;sourceMaps&quot;: true,
+        &quot;webRoot&quot;: &quot;${workspaceRoot}&quot;,
+        &quot;sourceMapPathOverrides&quot;: {
+            &quot;webpack:/*&quot;: &quot;${webRoot}/*&quot;,
+            &quot;/./*&quot;: &quot;${webRoot}/*&quot;,
+            &quot;/src/*&quot;: &quot;${webRoot}/*&quot;,
+            &quot;/*&quot;: &quot;*&quot;,
+            &quot;/./~/*&quot;: &quot;${webRoot}/node_modules/*&quot;
         }
     }
-</code></pre></div><p>So we need to setup our <a href=https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/karma.conf.js target=_blank rel="noopener noreffer">karma.config.js</a> to allow for this connection:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff><span style=color:#f92672>-      browsers: [&#39;ChromeHeadless&#39;/*,&#39;PhantomJS&#39;,&#39;Firefox&#39;,&#39;Edge&#39;,&#39;ChromeCanary&#39;,&#39;Opera&#39;,&#39;IE&#39;,&#39;Safari&#39;*/],
-</span><span style=color:#f92672></span><span style=color:#a6e22e>+      browsers: [&#39;ChromeHeadlessDebugging&#39;/*,&#39;PhantomJS&#39;,&#39;Firefox&#39;,&#39;Edge&#39;,&#39;ChromeCanary&#39;,&#39;Opera&#39;,&#39;IE&#39;,&#39;Safari&#39;*/],
-</span><span style=color:#a6e22e>+      customLaunchers: {
-</span><span style=color:#a6e22e>+        ChromeHeadlessDebugging: {
-</span><span style=color:#a6e22e>+          base: &#39;ChromeHeadless&#39;,
-</span><span style=color:#a6e22e>+          flags: [
-</span><span style=color:#a6e22e>+            &#39;--remote-debugging-port=9222&#39;
-</span><span style=color:#a6e22e>+          ]
-</span><span style=color:#a6e22e>+        }
-</span><span style=color:#a6e22e>+      },
-</span></code></pre></div><p>Confirm this works by looking at the extension logs and seeing something like this:</p>
+</code></pre><p>So we need to setup our <a href=https://github.com/mikfreedman/jasmine-webpack-vscode/blob/master/karma.conf.js target=_blank rel="noopener noreffer">karma.config.js</a> to allow for this connection:</p>
+<pre tabindex=0><code>-      browsers: ['ChromeHeadless'/*,'PhantomJS','Firefox','Edge','ChromeCanary','Opera','IE','Safari'*/],
++      browsers: ['ChromeHeadlessDebugging'/*,'PhantomJS','Firefox','Edge','ChromeCanary','Opera','IE','Safari'*/],
++      customLaunchers: {
++        ChromeHeadlessDebugging: {
++          base: 'ChromeHeadless',
++          flags: [
++            '--remote-debugging-port=9222'
++          ]
++        }
++      },
+</code></pre><p>Confirm this works by looking at the extension logs and seeing something like this:</p>
 <pre tabindex=0><code>[3:24:25 PM] INFO: Listening to AngularReporter events on port 9222
 [3:24:33 PM] INFO: Test loading completed
 </code></pre><h3 id=mapping-source>Mapping Source</h3>
 <p>Get webpack to emit inline source maps in <a href=karma.conf.js rel>karma.conf.js</a>. Also ask it nicely to not minimize the generated code so that variable names match.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-diff data-lang=diff>       webpack: {
-<span style=color:#a6e22e>+        devtool: &#34;inline-source-map&#34;,
-</span><span style=color:#a6e22e>+        optimization: {
-</span><span style=color:#a6e22e>+          minimize: false
-</span><span style=color:#a6e22e>+        },
-</span></code></pre></div><h2 id=kill-stray-stuff>Kill stray stuff</h2>
+<pre tabindex=0><code>       webpack: {
++        devtool: &quot;inline-source-map&quot;,
++        optimization: {
++          minimize: false
++        },
+</code></pre><h2 id=kill-stray-stuff>Kill stray stuff</h2>
 <p>Keep an eye out for errant Chrome instances that gum up the works and generally foster weird behavior.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ps -ef | grep <span style=color:#ae81ff>9222</span> | cut -f <span style=color:#ae81ff>5</span> -d <span style=color:#e6db74>&#39; &#39;</span> | xargs kill
-</code></pre></div><p><a href="https://explainshell.com/explain?cmd=ps+-ef+%7C+grep+9222+%7C+cut+-f+5+-d+%27+%27++%7C+xargs+kill" target=_blank rel="noopener noreffer">Check out what this does</a></p></div><div class=post-footer id=post-footer>
+<pre tabindex=0><code>ps -ef | grep 9222 | cut -f 5 -d ' ' | xargs kill
+</code></pre><p><a href="https://explainshell.com/explain?cmd=ps+-ef+%7C+grep+9222+%7C+cut+-f+5+-d+%27+%27++%7C+xargs+kill" target=_blank rel="noopener noreffer">Check out what this does</a></p></div><div class=post-footer id=post-footer>
 <div class=post-info>
 <div class=post-info-line>
 <div class=post-info-mod>
