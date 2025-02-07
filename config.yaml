@@ -7,7 +7,7 @@ theme: loveit
 publishDir: "./docs"
 params:
   version: 0.2.X
-  description:  "Director, VMware Tanzu"
+  description:  ""
   defaultTheme: auto
   gitRepo: 'https://github.com/mikfreedman/mikfreedman.github.io/'
   dateFormat: '2006-01-02'
@@ -33,7 +33,7 @@ params:
       gravatarEmail: 'github@michael-freedman.com'
       avatarURL: /images/avatar.png
       title: ''
-      subtitle: "Director, VMware Tanzu"
+      subtitle: ""
       social: true
       disclaimer: ''
     posts:
